@@ -3,10 +3,8 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
-const pgp = require("pg-promise")();
 
 const indexRouter = require("./routes/index");
-const usersRouter = require("./routes/users");
 
 const app = express();
 
@@ -21,19 +19,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
-app.use("/users", usersRouter);
-
-const db = pgp(
-  `postgres://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`,
-);
-
-db.many("SELECT * from books")
-  .then((data) => {
-    console.log("DATA:", data);
-  })
-  .catch((error) => {
-    console.log("ERROR:", error);
-  });
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
