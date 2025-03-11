@@ -1,14 +1,8 @@
 // database queries
 const db = require("./db");
 
-function select_all() {
-  db.many("SELECT * from books")
-    .then((data) => {
-      return data;
-    })
-    .catch((error) => {
-      return error;
-    });
+async function selectAll() {
+  const data = await db.many("select * from books");
+  return data;
 }
-
-module.exports = { select_all };
+module.exports = { selectAll };

@@ -4,14 +4,10 @@ const db = require("../db/db");
 const queries = require("../db/queries");
 
 /* GET home page. */
-router.get("/", function (req, res, next) {
-  console.log("DB: ", db);
-
-  const records = queries.select_all();
-  console.log(typeof records);
-  console.log(records);
-
-  res.render("index", { title: "Books Catalog", records: records });
+router.get("/", async function (req, res, next) {
+  const books = await queries.selectAll();
+  console.log(books);
+  res.render("index", { title: "Books Catalog", books: books });
 });
 
 module.exports = router;

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start-dev": "dotenvx run -f .env.dev -- node ./bin/www",
+    "start-dev": "dotenvx run -f .env.dev -- nodemon ./bin/www",
     "start-prod": "dotenvx run -f .env.prod -- node ./bin/www"
   },
   "dependencies": {
@@ -14,6 +14,7 @@
     "express": "^4.21.2",
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1",
+    "nodemon": "^3.1.9",
     "pg-promise": "^11.10.2"
   }
 }

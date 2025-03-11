@@ -6,5 +6,10 @@
   </head>
   <body>
     <h1><%= title %></h1>
+    <ul>
+      <% books.map((book) => { %>
+        <li><%= book.title %></li>
+      <% }) %>
+    </ul>
   </body>
 </html>
