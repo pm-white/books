@@ -6,10 +6,23 @@
   </head>
   <body>
     <h1><%= title %></h1>
-    <ul>
-      <% books.map((book) => { %>
-        <li><%= book.title %></li>
-      <% }) %>
-    </ul>
+    <table>
+      <thead>
+        <tr>
+          <% headers.map((header) => { %>
+            <th><%= header %></th>
+          <% }) %> 
+        </tr>
+      </thead>
+      <tbody>
+        <% books.map((book) => { %>
+          <tr>
+            <% for (let key in book) { %>
+              <td><%= book[key] %></td>
+            <% } %>
+          </tr> 
+        <% }) %>
+      </tbody>
+    </table>
   </body>
 </html>

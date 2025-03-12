@@ -5,9 +5,17 @@ const queries = require("../db/queries");
 
 /* GET home page. */
 router.get("/", async function (req, res, next) {
-  const books = await queries.selectAll();
-  console.log(books);
-  res.render("index", { title: "Books Catalog", books: books });
+  req.books = await queries.selectAll();
+  req.table_headers = Object.keys(req.books[0]);
+  next();
+});
+
+router.get("/", function (req, res, next) {
+  res.render("index", {
+    title: "Books Catalog",
+    books: req.books,
+    headers: req.table_headers,
+  });
 });
 
 module.exports = router;
