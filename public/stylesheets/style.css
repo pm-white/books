@@ -1,3 +1,30 @@
+:root {
+  --blue: #4472ca;
+  --light-blue: #eff3fb;
+}
+
 body {
   font: Helvetica, Arial, sans-serif;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  border: 2px solid var(--blue);
+}
+
+th {
+  background-color: var(--blue);
+  color: white;
+}
+
+th,
+td {
+  border: 1px solid var(--blue);
+  padding: 0.4em;
+  text-align: left;
+}
+
+tbody tr:nth-child(even) {
+  background-color: var(--light-blue);
 }
