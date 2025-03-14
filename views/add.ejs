@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <nav>
+    <p><a href="/">Catalog</a></p>
+    <p><a href="/add">Add Book</a></p>
+    <p><a href="/stats">Stats</a></p>
+  </nav>
+  <body>
+    <form action='/add' method='post'>
+      <p>
+        <label for="title">Title:</label>
+        <input type="text" name="title" id="title">
+      </p>
+      <p>
+        <label for="first_name">Author first name:</label>
+        <input type="text" name="first_name" id="first_name">
+      </p>
+      <p>
+        <label for="last_name">Author last name:</label>
+        <input type="text" name="last_name" id="last_name">
+      </p>
+      <p>
+        <label for="year_published">Year Published:</label>
+        <input type="text" name="year_published" id="year_published">
+      </p>
+      <p>
+        <label for="type">Type:</label>
+        <select id="type" name="type">
+          <option value="Fiction">Fiction</option>
+          <option value="Non-Fiction">Non-fiction</option>
+        </select>
+      </p>
+      <p>
+        <label for="format">Format:</label>
+        <select id="format" name="format">
+          <option value="Book">Book</option>
+          <option value="Audiobook">Audiobook</option>
+        </select>
+      </p>
+      <p>
+        <label for="num_pages">Number of pages:</label>
+        <input type="number" name="num_pages" id="num_pages" min=0 max=1000>
+      </p>
+      <p>
+        <label for="start">Start date:</label>
+        <input type="date" name="start" value="" min="2025-01-01">
+      </p>
+      <p>
+        <label for="end">End date:</label>
+        <input type="date" name="end" value="" min="2025-01-01">
+      </p>
+      <p>
+        <button type="submit">Enter book</button>
+      </p>
+    </form>
+  </body>
+</html>

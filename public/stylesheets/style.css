@@ -1,16 +1,39 @@
 :root {
-  --blue: #4472ca;
-  --light-blue: #eff3fb;
+  --blue: #166088;
+  --light-blue: #edf7fc;
+  --text: #141414;
+  --highlight: #b0fe76;
+  --nav-highlight: #b8b8b8;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+html {
+  font: Helvetica, Arial, sans-serif;
+  box-sizing: border-box;
+  color: var(--text);
+  /*border: 1px red solid;*/
 }
 
 body {
-  font: Helvetica, Arial, sans-serif;
+  width: 60%;
+  margin: 0 auto;
+  overflow-y: scroll;
+  /*border: 1px blue solid;*/
+}
+
+a {
+  text-decoration: none;
+  color: var(--text);
 }
 
 table {
   border-collapse: collapse;
   border-spacing: 0;
-  border: 2px solid var(--blue);
 }
 
 th {
@@ -20,11 +43,32 @@ th {
 
 th,
 td {
-  border: 1px solid var(--blue);
   padding: 0.4em;
   text-align: left;
 }
 
 tbody tr:nth-child(even) {
   background-color: var(--light-blue);
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  height: 3em;
+  /*border: 1px green solid;*/
+}
+
+nav p {
+  padding: 0.5em 1em 0.5em 0em;
+  /*border: 2px orange solid;*/
+  font-weight: bold;
+}
+
+nav p:hover {
+  text-decoration: underline;
+}
+
+::selection {
+  color: var(--text);
+  background: var(--highlight);
 }

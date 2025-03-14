@@ -4,7 +4,7 @@ const db = require("../db/db");
 const queries = require("../db/queries");
 
 router.get("/", async function (req, res, next) {
-  res.send("some interesting statistics...");
+  res.render("stats", { title: "Dashboard" });
 });
 
 module.exports = router;
