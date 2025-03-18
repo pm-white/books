@@ -3,18 +3,35 @@ const router = express.Router();
 const db = require("../db/db");
 const queries = require("../db/queries");
 
-/* GET home page. */
+// homepage
 router.get("/", async function (req, res, next) {
-  req.books = await queries.selectAll();
-  req.table_headers = Object.keys(req.books[0]);
-  next();
-});
+  req.books = await queries.catalogView();
+  req.tableHeaders = Object.keys(req.books[0]);
+  req.bookTitles = await queries.selectAllTitles();
 
-router.get("/", function (req, res, next) {
   res.render("index", {
     title: "Books Catalog",
     books: req.books,
-    headers: req.table_headers,
+    headers: req.tableHeaders,
+    bookTitles: req.bookTitles,
+  });
+});
+
+// add a new book
+router.post("/addBook", (req, res) => {
+  res.render("add", { title: "Add a book", action: "addBook" });
+});
+
+// update an existing book
+router.post("/updateBook", async (req, res) => {
+  const bookData = await queries.getBookInfo(req.body.bookToEdit);
+  // console.log(
+  //   `${bookData.start.getYear()}-${bookData.start.getMonth()}-${bookData.start.getDate()}`,
+  // );
+  res.render("add", {
+    title: "Update a book",
+    action: "updateBook",
+    bookData: bookData,
   });
 });
 

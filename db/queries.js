@@ -2,7 +2,7 @@
 const db = require("./db");
 
 // get all books from the db
-async function selectAll() {
+async function catalogView() {
   const data = await db.many(
     `select title as "Title"
           , concat(author_first, ' ', author_last) as "Author"
@@ -14,7 +14,6 @@ async function selectAll() {
   );
   return data;
 }
-module.exports = { selectAll };
 
 // insert a book into the db
 function insertBook(
@@ -40,3 +39,17 @@ function insertBook(
     end,
   ]);
 }
+
+// get the titles of books
+async function selectAllTitles() {
+  const data = await db.many("select title from books order by title");
+  return data;
+}
+
+// get book info for updating
+async function getBookInfo(title) {
+  const data = await db.one("select * from books where title = $1", [title]);
+  return data;
+}
+
+module.exports = { catalogView, insertBook, selectAllTitles, getBookInfo };

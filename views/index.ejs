@@ -8,10 +8,25 @@
   </head>
   <nav>
     <p><a href="/">Catalog</a></p>
-    <p><a href="/add">Add Book</a></p>
     <p><a href="/stats">Stats</a></p>
   </nav>
   <body>
+    <form action="/addBook" method="post">
+      <input type="submit" name="add" value="Add a book">
+    </form>
+
+    <form action="/updateBook" method="post">
+      <input type="submit" name="add" value="Update a book">
+      <p>
+        <label for="bookToEdit">Book to update:</label>
+        <select id="bookToEdit" name="bookToEdit">
+          <% bookTitles.forEach((title) => { %>
+            <option value="<%= title.title %>"><%= title.title %></option>
+          <% }) %>
+        </select>
+      </p>
+    </form>
+
     <table>
       <thead>
         <tr>
