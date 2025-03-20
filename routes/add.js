@@ -39,7 +39,7 @@ router.post("/update", (req, res) => {
       req.body.num_pages,
       req.body.start,
       req.body.end,
-      req.body.title,
+      req.body.original_title,
     )
     .then(() => {
       res.status(200).redirect("/?=message=Success!");

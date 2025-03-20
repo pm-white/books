@@ -44,9 +44,9 @@ async function updateBook(
   num_pages,
   start,
   end,
+  originalTitle,
 ) {
   await db.none(
-    // "update books set title = $1, first = $2, last = $3, year_published = $4, type = $5, format = $6, num_pages = $7, start = $8, end = $9 where title = $10",
     `update books
         set title = $1
           , author_first = $2
@@ -68,7 +68,7 @@ async function updateBook(
       num_pages,
       start,
       end,
-      title,
+      originalTitle,
     ],
   );
 }
@@ -87,7 +87,7 @@ async function getBookInfo(title) {
 
 // get book info for updating
 async function deleteBook(title) {
-  const data = await db.one("delete from books where title = $1", [title]);
+  const data = await db.none("delete from books where title = $1", [title]);
   return data;
 }
 
