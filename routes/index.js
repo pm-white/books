@@ -19,13 +19,13 @@ router.get("/", async function (req, res, next) {
 
 // add a new book
 router.post("/addBook", (req, res) => {
-  res.render("add", { title: "Add a book", action: "addBook" });
+  res.render("bookForm", { title: "Add a book", action: "addBook" });
 });
 
 // update an existing book
 router.post("/updateBook", async (req, res) => {
   const bookData = await queries.getBookInfo(req.body.bookToEdit);
-  res.render("add", {
+  res.render("bookForm", {
     title: "Update a book",
     action: "updateBook",
     bookData: bookData,

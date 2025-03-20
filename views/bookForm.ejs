@@ -13,7 +13,7 @@
   <body>
     <!-- blank form for new book -->
     <% if (action === 'addBook') { %>
-      <form action='/add' method='post'>
+      <form action='/bookForm' method='post'>
         <p>
           <label for="title">Title:</label>
           <input type="text" name="title" id="title">
@@ -62,7 +62,7 @@
       </form>
       <!-- form with values populated from db -->
       <% } else if (action === 'updateBook') { %>
-        <form action='/add/update' method='post'>
+        <form action='/bookForm/update' method='post'>
           <p>
             <input type="hidden" name="original_title" value="<%= bookData.title %>">
           </p>
@@ -115,7 +115,7 @@
           </p>
         </form>
         <!-- delete a book -->
-        <form action='/add/delete' method='post'>
+        <form action='/bookForm/delete' method='post'>
           <p>
             <input type="hidden" name="title" value="<%= bookData.title %>">
           </p>
