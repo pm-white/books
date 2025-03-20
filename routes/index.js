@@ -25,9 +25,6 @@ router.post("/addBook", (req, res) => {
 // update an existing book
 router.post("/updateBook", async (req, res) => {
   const bookData = await queries.getBookInfo(req.body.bookToEdit);
-  // console.log(
-  //   `${bookData.start.getYear()}-${bookData.start.getMonth()}-${bookData.start.getDate()}`,
-  // );
   res.render("add", {
     title: "Update a book",
     action: "updateBook",

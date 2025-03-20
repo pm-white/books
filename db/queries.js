@@ -16,7 +16,7 @@ async function catalogView() {
 }
 
 // insert a book into the db
-function insertBook(
+async function insertBook(
   title,
   first,
   last,
@@ -27,17 +27,50 @@ function insertBook(
   start,
   end,
 ) {
-  db.none("insert into books values ($1, $2, $3, $4, $5, $6, $7, $8, $9)", [
-    title,
-    first,
-    last,
-    year_published,
-    type,
-    format,
-    num_pages,
-    start,
-    end,
-  ]);
+  await db.none(
+    "insert into books values ($1, $2, $3, $4, $5, $6, $7, $8, $9)",
+    [title, first, last, year_published, type, format, num_pages, start, end],
+  );
+}
+
+// insert a book into the db
+async function updateBook(
+  title,
+  first,
+  last,
+  year_published,
+  type,
+  format,
+  num_pages,
+  start,
+  end,
+) {
+  await db.none(
+    // "update books set title = $1, first = $2, last = $3, year_published = $4, type = $5, format = $6, num_pages = $7, start = $8, end = $9 where title = $10",
+    `update books
+        set title = $1
+          , author_first = $2
+          , author_last = $3
+          , year_published = $4
+          , type = $5
+          , format = $6
+          , num_pages = $7
+          , start = $8
+          , "end" = $9
+      where title = $10`,
+    [
+      title,
+      first,
+      last,
+      year_published,
+      type,
+      format,
+      num_pages,
+      start,
+      end,
+      title,
+    ],
+  );
 }
 
 // get the titles of books
@@ -52,4 +85,17 @@ async function getBookInfo(title) {
   return data;
 }
 
-module.exports = { catalogView, insertBook, selectAllTitles, getBookInfo };
+// get book info for updating
+async function deleteBook(title) {
+  const data = await db.one("delete from books where title = $1", [title]);
+  return data;
+}
+
+module.exports = {
+  catalogView,
+  insertBook,
+  selectAllTitles,
+  getBookInfo,
+  updateBook,
+  deleteBook,
+};
