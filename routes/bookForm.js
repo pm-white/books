@@ -5,6 +5,11 @@ const queries = require("../db/queries");
 
 // add a new book
 router.post("/", (req, res, next) => {
+  // place holder dates for in progress books
+  if (req.body.end === "") {
+    req.body.end = "1900-01-01";
+  }
+
   queries
     .insertBook(
       req.body.title,

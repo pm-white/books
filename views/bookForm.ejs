@@ -50,11 +50,11 @@
         </p>
         <p>
           <label for="start">Start date:</label>
-          <input type="date" name="start" value="" min="2025-01-01">
+          <input type="date" name="start" value="">
         </p>
         <p>
           <label for="end">End date:</label>
-          <input type="date" name="end" value="" min="2025-01-01">
+          <input type="date" name="end" value="">
         </p>
         <p>
           <button type="submit">Enter book</button>
@@ -104,11 +104,11 @@
           </p>
           <p>
             <label for="start">Start date:</label>
-            <input type="date" name="start" min="2024-01-01" value="<%= bookData.start.toISOString().split('T')[0] %>">
+            <input type="date" name="start" value="<%= bookData.start.toISOString().split('T')[0] %>">
           </p>
           <p>
             <label for="end">End date:</label>
-            <input type="date" name="end" min="2024-01-01" value="<%= bookData.end.toISOString().split('T')[0] %>">
+            <input type="date" name="end" value="<%= bookData.end.toISOString().split('T')[0] %>">
           </p>
           <p>
             <button type="submit">Update book</button>
