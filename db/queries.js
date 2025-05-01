@@ -10,7 +10,7 @@ async function catalogView() {
           , format as "Format"
           , extract(year from "end") as "Year Read"
        from books
-      order by author_last, author_first, year_published desc`,
+      order by "end" desc`,
   );
   return data;
 }
