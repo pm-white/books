@@ -11,21 +11,20 @@
     <p><a href="/stats">Stats</a></p>
   </nav>
   <body>
-    <form action="/addBook" method="post">
-      <input type="submit" name="add" value="Add a book">
-    </form>
+    <section id="add-remove-buttons">
+      <form action="/addBook" method="post">
+        <input type="submit" name="add" value="Add a book">
+      </form>
 
-    <form action="/updateBook" method="post">
-      <input type="submit" name="update" value="Update a book">
-      <p>
-        <label for="bookToEdit">Book to update:</label>
+      <form action="/updateBook" method="post">
+        <input type="submit" name="update" value="Update a book">
         <select id="bookToEdit" name="bookToEdit">
           <% bookTitles.forEach((title) => { %>
             <option value="<%= title.title %>"><%= title.title %></option>
           <% }) %>
         </select>
-      </p>
-    </form>
+      </form>
+    </section>
 
     <table>
       <thead>
