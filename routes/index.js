@@ -24,12 +24,14 @@ router.post("/addBook", (req, res) => {
 
 // update an existing book
 router.post("/updateBook", async (req, res) => {
-  const bookData = await queries.getBookInfo(req.body.bookToEdit);
-  res.render("bookForm", {
-    title: "Update a book",
-    action: "updateBook",
-    bookData: bookData,
-  });
+  if (req.body.bookToEdit !== "") {
+    const bookData = await queries.getBookInfo(req.body.bookToEdit);
+    res.render("bookForm", {
+      title: "Update a book",
+      action: "updateBook",
+      bookData: bookData,
+    });
+  }
 });
 
 module.exports = router;

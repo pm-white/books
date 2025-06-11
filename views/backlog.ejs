@@ -12,18 +12,10 @@
     <p><a href="/backlog">Backlog</a></p>
   </nav>
   <body>
-    <section id="add-remove-buttons">
-      <form action="/addBook" method="post">
-        <input type="submit" name="add" value="Add a book">
-      </form>
 
-      <form action="/updateBook" method="post">
-        <input type="submit" name="update" value="Update a book">
-        <select id="bookToEdit" name="bookToEdit">
-          <% bookTitles.forEach((title) => { %>
-            <option value="<%= title.title %>"><%= title.title %></option>
-          <% }) %>
-        </select>
+    <section id="add-remove-buttons">
+      <form action="/backlog" method="post">
+        <input type="submit" name="add" value="Add a book">
       </form>
     </section>
 
@@ -36,7 +28,7 @@
         </tr>
       </thead>
       <tbody>
-        <% books.map((book) => { %>
+        <% backlog.map((book) => { %>
           <tr>
             <% for (let key in book) { %>
               <td><%= book[key] %></td>

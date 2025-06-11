@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <nav>
+    <p><a href="/">Catalog</a></p>
+    <p><a href="/stats">Stats</a></p>
+    <p><a href="/backlog">Backlog</a></p>
+  </nav>
+  <body>
+      <form action='/backlogForm' method='post'>
+        <p>
+          <label for="title">Title:</label>
+          <input type="text" name="title" id="title">
+        </p>
+        <p>
+          <label for="source">Source:</label>
+          <input type="text" name="source" id="source">
+        </p>
+        <p>
+          <label for="topics">Topics:</label>
+          <input type="text" name="topics" id="topics">
+        </p>
+        <p>
+          <button type="submit">Enter book</button>
+        </p>
+      </form>
+  </body>
+</html>

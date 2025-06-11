@@ -91,6 +91,21 @@ async function deleteBook(title) {
   return data;
 }
 
+// get backlog books
+async function getBacklog() {
+  const data = await db.many("select title, topics from backlog");
+  return data;
+}
+
+// insert a book into the backlog table
+async function insertBookBacklog(title, source, topics) {
+  await db.none("insert into backlog values ($1, $2, $3)", [
+    title,
+    source,
+    topics,
+  ]);
+}
+
 module.exports = {
   catalogView,
   insertBook,
@@ -98,4 +113,6 @@ module.exports = {
   getBookInfo,
   updateBook,
   deleteBook,
+  getBacklog,
+  insertBookBacklog,
 };
