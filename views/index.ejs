@@ -5,25 +5,16 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   </head>
   <nav>
     <p><a href="/">Catalog</a></p>
-    <p><a href="/stats">Stats</a></p>
     <p><a href="/backlog">Backlog</a></p>
   </nav>
   <body>
     <section id="add-remove-buttons">
       <form action="/addBook" method="post">
         <input type="submit" name="add" value="Add a book">
-      </form>
-
-      <form action="/updateBook" method="post">
-        <input type="submit" name="update" value="Update a book">
-        <select id="bookToEdit" name="bookToEdit">
-          <% bookTitles.forEach((title) => { %>
-            <option value="<%= title.title %>"><%= title.title %></option>
-          <% }) %>
-        </select>
       </form>
     </section>
 
@@ -33,6 +24,7 @@
           <% headers.map((header) => { %>
             <th><%= header %></th>
           <% }) %> 
+          <th>Edit</th>
         </tr>
       </thead>
       <tbody>
@@ -41,6 +33,22 @@
             <% for (let key in book) { %>
               <td><%= book[key] %></td>
             <% } %>
+            <td>
+              <div id="edit-delete-icons-container">
+                <form action="/updateBook" method="post">
+                  <input type="hidden" name="title" value="<%= book.Title %>">
+                  <button type="submit">
+                    <span class="material-icons">edit</span>
+                  </button>
+                </form>
+                <form action="/deleteBook" method="post">
+                  <input type="hidden" name="title" value="<%= book.Title %>">
+                  <button type="submit">
+                    <span class="material-icons">delete</span>
+                  </button>
+                </form>
+              </div>
+            </td>
           </tr> 
         <% }) %>
       </tbody>

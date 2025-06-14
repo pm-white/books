@@ -15,4 +15,23 @@ router.post("/", (req, res) => {
     });
 });
 
+// add a new book
+router.post("/updateBook", (req, res) => {
+  console.log("Update:", req.body);
+  queries
+    .updateBacklogBook(
+      req.body.title,
+      req.body.source,
+      req.body.topics,
+      req.body.original_title,
+    )
+    .then(() => {
+      res.status(200).redirect("/backlog?=message=Success!");
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).redirect("/backlog?=message=Error adding book.");
+    });
+});
+
 module.exports = router;

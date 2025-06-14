@@ -8,7 +8,6 @@
   </head>
   <nav>
     <p><a href="/">Catalog</a></p>
-    <p><a href="/stats">Stats</a></p>
     <p><a href="/backlog">Backlog</a></p>
   </nav>
   <body>
@@ -115,15 +114,6 @@
             <button type="submit">Update book</button>
           </p>
         </form>
-        <!-- delete a book -->
-        <form action='/bookForm/delete' method='post'>
-          <p>
-            <input type="hidden" name="title" value="<%= bookData.title %>">
-          </p>
-          <p>
-            <button type="submit">Delete book</button>
-          </p>
-        </form> 
       <% } %> 
   </body>
 </html>

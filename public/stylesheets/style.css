@@ -93,3 +93,18 @@ select:hover {
   background-color: var(--light-blue);
   cursor: pointer;
 }
+
+#edit-delete-icons-container {
+  display: flex;
+  flex-direction: row;
+}
+
+#edit-delete-icons-container button {
+  color: var(--blue);
+  border: none;
+  background-color: transparent;
+}
+
+#edit-delete-icons-container button:hover {
+  color: black;
+}

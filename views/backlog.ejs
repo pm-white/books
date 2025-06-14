@@ -5,10 +5,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   </head>
   <nav>
     <p><a href="/">Catalog</a></p>
-    <p><a href="/stats">Stats</a></p>
     <p><a href="/backlog">Backlog</a></p>
   </nav>
   <body>
@@ -25,6 +25,7 @@
           <% headers.map((header) => { %>
             <th><%= header %></th>
           <% }) %> 
+            <th>Edit</th>
         </tr>
       </thead>
       <tbody>
@@ -33,6 +34,22 @@
             <% for (let key in book) { %>
               <td><%= book[key] %></td>
             <% } %>
+            <td>
+              <div id="edit-delete-icons-container">
+                <form action="/backlog/updateBook" method="post">
+                  <input type="hidden" name="title" value="<%= book.title %>">
+                  <button type="submit">
+                    <span class="material-icons">edit</span>
+                  </button>
+                </form>
+                <form action="/backlog/deleteBook" method="post">
+                  <input type="hidden" name="title" value="<%= book.title %>">
+                  <button type="submit">
+                    <span class="material-icons">delete</span>
+                  </button>
+                </form>
+              </div>
+            </td>
           </tr> 
         <% }) %>
       </tbody>

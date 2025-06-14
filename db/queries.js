@@ -73,19 +73,13 @@ async function updateBook(
   );
 }
 
-// get the titles of books
-async function selectAllTitles() {
-  const data = await db.many("select title from books order by title");
-  return data;
-}
-
 // get book info for updating
 async function getBookInfo(title) {
   const data = await db.one("select * from books where title = $1", [title]);
   return data;
 }
 
-// get book info for updating
+// delete a book
 async function deleteBook(title) {
   const data = await db.none("delete from books where title = $1", [title]);
   return data;
@@ -93,7 +87,9 @@ async function deleteBook(title) {
 
 // get backlog books
 async function getBacklog() {
-  const data = await db.many("select title, topics from backlog");
+  const data = await db.many(
+    "select title, topics from backlog order by title",
+  );
   return data;
 }
 
@@ -106,13 +102,40 @@ async function insertBookBacklog(title, source, topics) {
   ]);
 }
 
+// get book info for updating a backlog book
+async function getBacklogBookInfo(title) {
+  const data = await db.one("select * from backlog where title = $1", [title]);
+  return data;
+}
+
+// delete a book from the backlog
+async function deleteBacklogBook(title) {
+  const data = await db.none("delete from backlog where title = $1", [title]);
+  return data;
+}
+
+// insert a book into the db
+async function updateBacklogBook(title, source, topics, originalTitle) {
+  console.log("Updating", originalTitle, "to be", title);
+  await db.none(
+    `update backlog
+        set title = $1
+          , source = $2
+          , topics = $3
+      where title = $4`,
+    [title, source, topics, originalTitle],
+  );
+}
+
 module.exports = {
   catalogView,
   insertBook,
-  selectAllTitles,
   getBookInfo,
   updateBook,
   deleteBook,
   getBacklog,
   insertBookBacklog,
+  getBacklogBookInfo,
+  deleteBacklogBook,
+  updateBacklogBook,
 };
