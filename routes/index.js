@@ -34,7 +34,6 @@ router.post("/addBook", (req, res) => {
 router.post(
   "/updateBook",
   asyncHandler(async (req, res) => {
-    console.log("POST /updateBook, body:", req.body);
     if (req.body.title !== "") {
       const bookData = await queries.getBookInfo(req.body.title);
       res.render("bookForm", {

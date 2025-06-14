@@ -32,7 +32,6 @@ router.post("/", (req, res, next) => {
 
 // update an existing book
 router.post("/update", (req, res) => {
-  console.log(req);
   queries
     .updateBook(
       req.body.title,

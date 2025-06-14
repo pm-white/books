@@ -17,7 +17,6 @@ router.post("/", (req, res) => {
 
 // add a new book
 router.post("/updateBook", (req, res) => {
-  console.log("Update:", req.body);
   queries
     .updateBacklogBook(
       req.body.title,

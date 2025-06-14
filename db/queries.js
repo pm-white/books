@@ -116,7 +116,6 @@ async function deleteBacklogBook(title) {
 
 // insert a book into the db
 async function updateBacklogBook(title, source, topics, originalTitle) {
-  console.log("Updating", originalTitle, "to be", title);
   await db.none(
     `update backlog
         set title = $1
