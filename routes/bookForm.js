@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../db/db");
 const queries = require("../db/queries");
 
 // add a new book
