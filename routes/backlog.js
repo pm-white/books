@@ -2,6 +2,7 @@ const express = require("express");
 const asyncHandler = require("express-async-handler");
 const router = express.Router();
 const queries = require("../db/queries");
+const { requiresAuth } = require("express-openid-connect");
 
 router.get(
   "/",
@@ -41,7 +42,7 @@ router.post(
 );
 
 // delete a book
-router.post("/deleteBook", (req, res) => {
+router.post("/deleteBook", requiresAuth(), (req, res) => {
   queries
     .deleteBacklogBook(req.body.title)
     .then(() => {

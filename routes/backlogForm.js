@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const queries = require("../db/queries");
+const { requiresAuth } = require("express-openid-connect");
 
 // add a new book
-router.post("/", (req, res) => {
+router.post("/", requiresAuth(), (req, res) => {
   queries
     .insertBookBacklog(req.body.title, req.body.source, req.body.topics)
     .then(() => {
@@ -16,7 +17,7 @@ router.post("/", (req, res) => {
 });
 
 // add a new book
-router.post("/updateBook", (req, res) => {
+router.post("/updateBook", requiresAuth(), (req, res) => {
   queries
     .updateBacklogBook(
       req.body.title,

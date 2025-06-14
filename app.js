@@ -3,6 +3,7 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+const { auth } = require("express-openid-connect");
 
 const indexRouter = require("./routes/index");
 const bookFormRouter = require("./routes/bookForm");
@@ -20,6 +21,18 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+
+// authentication
+const auth_config = {
+  authRequired: process.env.AUTH_AUTH_REQUIRED,
+  auth0Logout: process.env.AUTH_AUTH0_LOGOUT,
+  secret: process.env.AUTH_SECRET,
+  baseURL: process.env.AUTH_BASE_URL,
+  clientID: process.env.AUTH_CLIENT_ID,
+  issuerBaseURL: process.env.AUTH_ISSUER_BASE_URL,
+};
+
+app.use(auth(auth_config));
 
 app.use("/", indexRouter);
 app.use("/bookForm", bookFormRouter);
