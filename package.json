@@ -1,10 +1,10 @@
 {
   "name": "app",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "dotenvx run -f .env.dev -- nodemon ./bin/www",
-    "prod": "dotenvx run -f .env.prod -- node ./bin/www"
+    "start": "node ./bin/www"
   },
   "dependencies": {
     "@dotenvx/dotenvx": "^1.38.4",
