@@ -71,3 +71,33 @@ group by
 order by 
 	r.end_date desc
 ;
+
+drop view if exists currently_reading; 
+create or replace view currently_reading as
+select
+	case
+		when b.sub_title is null then b.title
+		else concat(b.title, ': ', b.sub_title)
+	end as title,
+	string_agg(
+		case 
+			when a.middle_name is null then concat(a.first_name, ' ', a.last_name)
+			else concat(a.first_name, ' ', a.middle_name , ' ', a.last_name)
+		end,
+		', '
+		order by a.last_name, a.first_name
+	) as author,
+	b.year as year_published
+from
+	books b
+left join book_authors ba on b.id = ba.book_id
+left join authors a on a.id = ba.author_id
+left join readings r on r.book_id = b.id
+where
+	r.start_date is not null 
+	and r.end_date is null
+group by
+	b.title, b.sub_title, b.year, r.end_date
+order by 
+	r.end_date desc
+;
