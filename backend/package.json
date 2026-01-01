@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "dev": "tsc && dotenvx run -f .env.dev -- node ./dist/index.js"
+    "dev": "tsc && dotenvx run -f .env.dev -- node ./dist/index.js",
+    "db:generateDev": "dotenvx run -f .env.dev -- drizzle-kit generate",
+    "db:migrateDev": "dotenvx run -f .env.dev -- drizzle-kit migrate"
   },
   "license": "ISC",
   "type": "module",

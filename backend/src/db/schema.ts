@@ -8,23 +8,14 @@ import {
 } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
 
-export const books = pgTable(
-  "books",
-  {
-    id: integer().primaryKey().generatedAlwaysAsIdentity(),
-    title: varchar("title", { length: 255 }).notNull(),
-    subTitle: varchar("subTitle", { length: 255 }),
-    type: varchar("type", { length: 255 }).notNull(),
-    year: smallint("year").notNull(),
-    numPages: smallint("numPages").notNull(),
-  },
-  (table) => {
-    [
-      check("year_check", sql(`${table.year} > 0`)),
-      check("numPages_check", sql(`${table.numPages} > 0`)),
-    ];
-  },
-);
+export const books = pgTable("books", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  title: varchar("title", { length: 255 }).notNull(),
+  subTitle: varchar("subTitle", { length: 255 }),
+  type: varchar("type", { length: 255 }).notNull(),
+  year: smallint("year").notNull(),
+  numPages: smallint("numPages").notNull(),
+});
 
 export const authors = pgTable("authors", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
