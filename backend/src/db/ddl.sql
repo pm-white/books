@@ -1,103 +1,68 @@
--- TABLES ------------
-create table if not exists books (
-	id serial not null primary key,
-	title varchar(255) not null,
-	sub_title varchar(255),
-	type varchar(255) not null,
-	year smallint not null check (num_pages > 0),
-	num_pages smallint not null check (num_pages > 0)
-);
-
-create table if not exists authors (
-	id serial not null primary key,
-	first_name varchar(255) not null,
-	middle_name varchar(255),
-	last_name varchar(255)
-);
-
-create table if not exists topics (
-	id serial not null primary key,
-	topic varchar(255) not null
-);
-
--- when a book was read
-create table if not exists readings (
-	id serial not null primary key,
-	start_date date not null,
-	end_date date,
-	format varchar(255) not null,
-	book_id int references books(id) on delete cascade
-);
-
-create table if not exists book_topics (
-	id serial not null primary key,
-	book_id int references books(id) on delete cascade,
-	topic_id int references topics(id) on delete cascade
-);
-
-create table if not exists book_authors (
-	id serial not null primary key,
-	book_id int references books(id) on delete cascade,
-	author_id int references authors(id) on delete cascade
-);
-
--- VIEWS ------------
-drop view if exists completed_books; 
-create or replace view completed_books as
+drop view if exists "booksList" cascade; 
+create or replace view "booksList" as
 select
 	case
-		when b.sub_title is null then b.title
-		else concat(b.title, ': ', b.sub_title)
+		when b."subTitle" is null then b.title
+		else concat(b.title, ': ', b."subTitle")
 	end as title,
 	string_agg(
 		case 
-			when a.middle_name is null then concat(a.first_name, ' ', a.last_name)
-			else concat(a.first_name, ' ', a.middle_name , ' ', a.last_name)
+			when a."middleName" is null then concat(a."firstName", ' ', a."lastName")
+			else concat(a."firstName", ' ', a."middleName" , ' ', a."lastName")
 		end,
 		', '
-		order by a.last_name, a.first_name
+		order by a."lastName", a."firstName"
 	) as author,
-	b.year as year_published,
-	extract(year from r.end_date)::integer as year_read
+	b.year as "yearPublished",
+	extract(year from r."endDate")::integer as "yearRead",
+	case
+		when (r."startDate" is not null and r."endDate" is null) then 'in progress'
+		when r."endDate" is not null then 'completed'
+		else 'backlog'
+	end as status
 from
 	books b
-left join book_authors ba on b.id = ba.book_id
-left join authors a on a.id = ba.author_id
-left join readings r on r.book_id = b.id
-where
-	r.end_date is not null
+left join "bookAuthors" ba on b.id = ba."bookId"
+left join authors a on a.id = ba."authorId"
+left join readings r on r."bookId" = b.id
 group by
-	b.title, b.sub_title, b.year, r.end_date
+	b.title, b."subTitle", b.year, r."endDate", r."startDate"
 order by 
-	r.end_date desc
+	r."endDate" desc
 ;
 
-drop view if exists currently_reading; 
-create or replace view currently_reading as
+drop view if exists "completedBooks"; 
+create or replace view "completedBooks" as
 select
-	case
-		when b.sub_title is null then b.title
-		else concat(b.title, ': ', b.sub_title)
-	end as title,
-	string_agg(
-		case 
-			when a.middle_name is null then concat(a.first_name, ' ', a.last_name)
-			else concat(a.first_name, ' ', a.middle_name , ' ', a.last_name)
-		end,
-		', '
-		order by a.last_name, a.first_name
-	) as author,
-	b.year as year_published
+	title,
+	author,
+	"yearPublished",
+	"yearRead"
 from
-	books b
-left join book_authors ba on b.id = ba.book_id
-left join authors a on a.id = ba.author_id
-left join readings r on r.book_id = b.id
+	"booksList"
 where
-	r.start_date is not null 
-	and r.end_date is null
-group by
-	b.title, b.sub_title, b.year, r.end_date
-order by 
-	r.end_date desc
+	status = 'completed'
+;
+
+drop view if exists "backlogBooks"; 
+create or replace view "backlogBooks" as
+select
+	title,
+	author,
+	"yearPublished"
+from
+	"booksList"
+where
+	status = 'backlog'
+;
+
+drop view if exists "inProgressBooks"; 
+create or replace view "inProgressBooks" as
+select
+	title,
+	author
+from
+	"booksList"
+where
+	status = 'in progress'
 ;

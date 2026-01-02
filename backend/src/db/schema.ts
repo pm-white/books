@@ -1,12 +1,4 @@
-import {
-  pgTable,
-  varchar,
-  smallint,
-  integer,
-  date,
-  check,
-} from "drizzle-orm/pg-core";
-import { sql } from "drizzle-orm";
+import { pgTable, varchar, smallint, integer, date } from "drizzle-orm/pg-core";
 
 export const books = pgTable("books", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
@@ -39,7 +31,7 @@ export const readings = pgTable("readings", {
     .references(() => books.id, { onDelete: "cascade" }),
 });
 
-export const book_topics = pgTable("book_topics", {
+export const bookTopics = pgTable("bookTopics", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   bookId: integer("bookId")
     .notNull()
@@ -49,7 +41,7 @@ export const book_topics = pgTable("book_topics", {
     .references(() => topics.id, { onDelete: "cascade" }),
 });
 
-export const book_authors = pgTable("book_authors", {
+export const bookAuthors = pgTable("bookAuthors", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   bookId: integer("bookId")
     .notNull()
