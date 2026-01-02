@@ -30,39 +30,3 @@ group by
 order by 
 	r."endDate" desc
 ;
-
-drop view if exists "completedBooks"; 
-create or replace view "completedBooks" as
-select
-	title,
-	author,
-	"yearPublished",
-	"yearRead"
-from
-	"booksList"
-where
-	status = 'completed'
-;
-
-drop view if exists "backlogBooks"; 
-create or replace view "backlogBooks" as
-select
-	title,
-	author,
-	"yearPublished"
-from
-	"booksList"
-where
-	status = 'backlog'
-;
-
-drop view if exists "inProgressBooks"; 
-create or replace view "inProgressBooks" as
-select
-	title,
-	author
-from
-	"booksList"
-where
-	status = 'in progress'
-;

@@ -1,4 +1,12 @@
-import { pgTable, varchar, smallint, integer, date } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  varchar,
+  smallint,
+  integer,
+  date,
+  pgView,
+} from "drizzle-orm/pg-core";
+import { eq } from "drizzle-orm";
 
 export const books = pgTable("books", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
@@ -50,3 +58,11 @@ export const bookAuthors = pgTable("bookAuthors", {
     .notNull()
     .references(() => authors.id, { onDelete: "cascade" }),
 });
+
+export const booksList = pgView("booksList", {
+  title: varchar("title", { length: 255 }).notNull(),
+  author: varchar("author", { length: 255 }).notNull(),
+  yearPublished: integer("yearPublished").notNull(),
+  yearRead: integer("yearRead").notNull(),
+  status: varchar("status", { length: 255 }).notNull(),
+}).existing();

@@ -1,9 +1,9 @@
 export interface Book {
   title: string;
   author: string;
-  year_published: number;
-  year_read: number;
+  yearPublished: number;
+  yearRead: number;
   type?: string;
-  num_pages?: number;
+  numPages?: number;
   topics?: string[];
 }
