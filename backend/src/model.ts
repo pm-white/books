@@ -21,3 +21,38 @@ export async function getCompletedBooks(): Promise<Book[]> {
 
   return books;
 }
+
+export async function getInProgressBooks(): Promise<Book[]> {
+  let books: Book[] = [];
+  try {
+    books = await db
+      .select({
+        title: booksList.title,
+        author: booksList.author,
+      })
+      .from(booksList)
+      .where(eq(booksList.status, "in progress"));
+  } catch (e) {
+    console.error(e);
+  }
+
+  return books;
+}
+
+export async function getBacklogBooks(): Promise<Book[]> {
+  let books: Book[] = [];
+  try {
+    books = await db
+      .select({
+        title: booksList.title,
+        author: booksList.author,
+        yearPublished: booksList.yearPublished,
+      })
+      .from(booksList)
+      .where(eq(booksList.status, "backlog"));
+  } catch (e) {
+    console.error(e);
+  }
+
+  return books;
+}

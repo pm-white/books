@@ -1,7 +1,11 @@
 import express from "express";
 import expressAsyncHandler from "express-async-handler";
 import { Book } from "./types.js";
-import { getCompletedBooks } from "./model.js";
+import {
+  getCompletedBooks,
+  getInProgressBooks,
+  getBacklogBooks,
+} from "./model.js";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -9,11 +13,45 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 
 app.get(
-  "/",
+  "/completed",
   expressAsyncHandler(async (req, res) => {
     let books: Book[];
     try {
       books = await getCompletedBooks();
+      if (books.length >= 1) {
+        res.status(200).json(books);
+      } else {
+        res.status(404).json({ Error: "No boooks in tracker." });
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }),
+);
+
+app.get(
+  "/in-progress",
+  expressAsyncHandler(async (req, res) => {
+    let books: Book[];
+    try {
+      books = await getInProgressBooks();
+      if (books.length >= 1) {
+        res.status(200).json(books);
+      } else {
+        res.status(404).json({ Error: "No boooks in tracker." });
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }),
+);
+
+app.get(
+  "/backlog",
+  expressAsyncHandler(async (req, res) => {
+    let books: Book[];
+    try {
+      books = await getBacklogBooks();
       if (books.length >= 1) {
         res.status(200).json(books);
       } else {
