@@ -1,68 +1,68 @@
-import {
-  pgTable,
-  varchar,
-  smallint,
-  integer,
-  date,
-  pgView,
-} from "drizzle-orm/pg-core";
-import { eq } from "drizzle-orm";
+import { pgTable, text, smallint, integer, date } from "drizzle-orm/pg-core";
 
 export const books = pgTable("books", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  title: varchar("title", { length: 255 }).notNull(),
-  subTitle: varchar("subTitle", { length: 255 }),
-  type: varchar("type", { length: 255 }).notNull(),
-  year: smallint("year").notNull(),
-  numPages: smallint("numPages").notNull(),
+  isbn: text().notNull(),
+  title: text().notNull(),
+  subTitle: text("sub_title"),
+  type: text().notNull(),
+  year: smallint().notNull(),
+  numPages: smallint("num_pages").notNull(),
 });
 
 export const authors = pgTable("authors", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  firstName: varchar("firstName", { length: 255 }).notNull(),
-  middleName: varchar("middleName", { length: 255 }),
-  lastName: varchar("lastName", { length: 255 }),
+  firstName: text("first_name").notNull(),
+  middleName: text("middle_name"),
+  lastName: text("last_name"),
 });
 
 export const topics = pgTable("topics", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  topic: varchar("topic", { length: 255 }).notNull(),
+  topic: text().notNull(),
+});
+
+export const publishers = pgTable("publishers", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  name: text(),
 });
 
 export const readings = pgTable("readings", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  startDate: date("startDate").notNull(),
-  endDate: date("endDate"),
-  format: varchar("format", { length: 255 }).notNull(),
-  bookId: integer("bookId")
+  startDate: date("start_date").notNull(),
+  endDate: date("end_date"),
+  format: text().notNull(),
+  bookId: integer("book_id")
     .notNull()
     .references(() => books.id, { onDelete: "cascade" }),
 });
 
-export const bookTopics = pgTable("bookTopics", {
+export const bookTopics = pgTable("book_topics", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  bookId: integer("bookId")
+  bookId: integer("book_id")
     .notNull()
     .references(() => books.id, { onDelete: "cascade" }),
-  topicId: integer("topicId")
+  topicId: integer("topic_id")
     .notNull()
     .references(() => topics.id, { onDelete: "cascade" }),
 });
 
-export const bookAuthors = pgTable("bookAuthors", {
+export const bookAuthors = pgTable("book_authors", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  bookId: integer("bookId")
+  bookId: integer("book_id")
     .notNull()
     .references(() => books.id, { onDelete: "cascade" }),
-  authorId: integer("authorId")
+  authorId: integer("author_id")
     .notNull()
     .references(() => authors.id, { onDelete: "cascade" }),
 });
 
-export const booksList = pgView("booksList", {
-  title: varchar("title", { length: 255 }).notNull(),
-  author: varchar("author", { length: 255 }).notNull(),
-  yearPublished: integer("yearPublished").notNull(),
-  yearRead: integer("yearRead").notNull(),
-  status: varchar("status", { length: 255 }).notNull(),
-}).existing();
+export const bookPublishers = pgTable("book_publishers", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  bookId: integer("book_id")
+    .notNull()
+    .references(() => books.id, { onDelete: "cascade" }),
+  publisherId: integer("publisher_id")
+    .notNull()
+    .references(() => publishers.id, { onDelete: "cascade" }),
+});
