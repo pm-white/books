@@ -1,0 +1,1 @@
+ALTER TABLE "readings" ALTER COLUMN "start_date" DROP NOT NULL;
