@@ -1,58 +1,59 @@
-import { booksList } from "./db/schema.js";
 import { db } from "./db/connection.js";
 import { Book } from "./types.js";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
+import {
+  books,
+  bookAuthors,
+  authors,
+  bookPublishers,
+  publishers,
+  bookTopics,
+  topics,
+  readings,
+} from "./db/schema.js";
 
-export async function getCompletedBooks(): Promise<Book[]> {
-  let books: Book[] = [];
+export async function getBooks(): Promise<Book[]> {
   try {
-    books = await db
+    const booksList = await db
       .select({
-        title: booksList.title,
-        author: booksList.author,
-        yearPublished: booksList.yearPublished,
-        yearRead: booksList.yearRead,
+        id: books.id,
+        isbn: books.isbn,
+        title: books.title,
+        subTitle: books.subTitle,
+        year: books.year,
+        numPages: books.numPages,
+        type: books.type,
+        authors: sql<string>`string_agg(distinct concat(${authors.firstName}, ' ', ${authors.middleName}, ' ', ${authors.lastName}), ',')`,
+        topics: sql<string>`string_agg(distinct ${topics.topic}, ',' order by ${topics.topic})`,
+        publisher: publishers.name,
+        startDate: readings.startDate,
+        endDate: readings.endDate,
+        readingId: readings.id,
       })
-      .from(booksList)
-      .where(eq(booksList.status, "completed"));
+      .from(books)
+      .innerJoin(bookAuthors, eq(bookAuthors.bookId, books.id))
+      .innerJoin(authors, eq(authors.id, bookAuthors.authorId))
+      .innerJoin(bookPublishers, eq(bookPublishers.bookId, books.id))
+      .innerJoin(publishers, eq(publishers.id, bookPublishers.publisherId))
+      .leftJoin(bookTopics, eq(bookTopics.bookId, books.id))
+      .leftJoin(topics, eq(topics.id, bookTopics.topicId))
+      .leftJoin(readings, eq(readings.bookId, books.id))
+      .groupBy(
+        books.id,
+        books.isbn,
+        books.title,
+        books.subTitle,
+        books.year,
+        books.numPages,
+        books.type,
+        publishers.name,
+        readings.startDate,
+        readings.endDate,
+        readings.id,
+      );
+    return booksList;
   } catch (e) {
     console.error(e);
+    return [];
   }
-
-  return books;
-}
-
-export async function getInProgressBooks(): Promise<Book[]> {
-  let books: Book[] = [];
-  try {
-    books = await db
-      .select({
-        title: booksList.title,
-        author: booksList.author,
-      })
-      .from(booksList)
-      .where(eq(booksList.status, "in progress"));
-  } catch (e) {
-    console.error(e);
-  }
-
-  return books;
-}
-
-export async function getBacklogBooks(): Promise<Book[]> {
-  let books: Book[] = [];
-  try {
-    books = await db
-      .select({
-        title: booksList.title,
-        author: booksList.author,
-        yearPublished: booksList.yearPublished,
-      })
-      .from(booksList)
-      .where(eq(booksList.status, "backlog"));
-  } catch (e) {
-    console.error(e);
-  }
-
-  return books;
 }

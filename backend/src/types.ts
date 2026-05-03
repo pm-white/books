@@ -1,9 +1,15 @@
 export interface Book {
+  id: number;
+  isbn: string;
   title: string;
-  author: string;
-  yearPublished?: number;
-  yearRead?: number;
-  type?: string;
-  numPages?: number;
-  topics?: string[];
+  subTitle: string | null;
+  year: number;
+  numPages: number;
+  type: string;
+  authors: string;
+  topics: string | null;
+  publisher: string | null;
+  startDate: string | null;
+  endDate: string | null;
+  readingId: number | null;
 }
