@@ -29,7 +29,7 @@ export const publishers = pgTable("publishers", {
 
 export const readings = pgTable("readings", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  startDate: date("start_date").notNull(),
+  startDate: date("start_date"),
   endDate: date("end_date"),
   format: text().notNull(),
   bookId: integer("book_id")
