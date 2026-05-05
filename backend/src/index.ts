@@ -1,7 +1,9 @@
 import express from "express";
 import expressAsyncHandler from "express-async-handler";
 import { Book } from "./types.js";
-import { getBooks, testQuery } from "./model.js";
+import { getBooks, addBook } from "./model.js";
+import { DatabaseError } from "pg";
+import { DrizzleQueryError } from "drizzle-orm/errors";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -21,6 +23,28 @@ app.get(
       }
     } catch (e) {
       console.log(e);
+    }
+  }),
+);
+
+app.post(
+  "/add-book",
+  expressAsyncHandler(async (req, res) => {
+    try {
+      await addBook(req.body);
+      res.status(201).json({ Success: "Book added." });
+    } catch (e) {
+      console.log(e);
+      // https://github.com/drizzle-team/drizzle-orm/discussions/916#discussioncomment-13854434
+      if (e instanceof DrizzleQueryError) {
+        if (e.cause instanceof DatabaseError) {
+          if (e.cause.code === "23505") {
+            res.status(400).json({ Error: "Book already exists." });
+          }
+        }
+      } else {
+        res.status(404).json({ Error: "Unable to add book." });
+      }
     }
   }),
 );
