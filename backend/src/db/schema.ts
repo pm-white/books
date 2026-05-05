@@ -2,7 +2,7 @@ import { pgTable, text, smallint, integer, date } from "drizzle-orm/pg-core";
 
 export const books = pgTable("books", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  isbn: text().notNull(),
+  isbn: text().notNull().unique(),
   title: text().notNull(),
   subTitle: text("sub_title"),
   type: text().notNull(),
@@ -19,19 +19,19 @@ export const authors = pgTable("authors", {
 
 export const topics = pgTable("topics", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  topic: text().notNull(),
+  topic: text().notNull().unique(),
 });
 
 export const publishers = pgTable("publishers", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  name: text(),
+  name: text().unique(),
 });
 
 export const readings = pgTable("readings", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   startDate: date("start_date"),
   endDate: date("end_date"),
-  format: text().notNull(),
+  format: text(),
   bookId: integer("book_id")
     .notNull()
     .references(() => books.id, { onDelete: "cascade" }),

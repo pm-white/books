@@ -40,7 +40,6 @@ values ((select id from books where title = 'Dancing Bears'), (select id from au
 insert into topics (topic)
 values ('Journalism'),
 	('Travel'),
-	('Media Studies'),
 	('Technology'),
 	('Business'),
 	('History'),
