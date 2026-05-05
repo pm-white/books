@@ -1,0 +1,1 @@
+ALTER TABLE "readings" ALTER COLUMN "format" DROP NOT NULL;
