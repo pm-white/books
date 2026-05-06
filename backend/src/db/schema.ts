@@ -1,4 +1,11 @@
-import { pgTable, text, smallint, integer, date } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  text,
+  smallint,
+  integer,
+  date,
+  unique,
+} from "drizzle-orm/pg-core";
 
 export const books = pgTable("books", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
@@ -10,12 +17,18 @@ export const books = pgTable("books", {
   numPages: smallint("num_pages").notNull(),
 });
 
-export const authors = pgTable("authors", {
-  id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  firstName: text("first_name").notNull(),
-  middleName: text("middle_name"),
-  lastName: text("last_name"),
-});
+export const authors = pgTable(
+  "authors",
+  {
+    id: integer().primaryKey().generatedAlwaysAsIdentity(),
+    firstName: text("first_name").notNull(),
+    middleName: text("middle_name"),
+    lastName: text("last_name"),
+  },
+  (t) => [
+    unique().on(t.firstName, t.middleName, t.lastName).nullsNotDistinct(),
+  ],
+);
 
 export const topics = pgTable("topics", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),

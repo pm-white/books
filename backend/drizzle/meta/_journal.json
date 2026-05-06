@@ -29,6 +29,13 @@
       "when": 1777850810786,
       "tag": "0003_yielding_terror",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1778032797691,
+      "tag": "0004_youthful_starjammers",
+      "breakpoints": true
     }
   ]
 }
