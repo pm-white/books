@@ -1,7 +1,7 @@
 import express from "express";
 import expressAsyncHandler from "express-async-handler";
 import { Book } from "./types.js";
-import { getBooks, addBook } from "./model.js";
+import { getBooks, addBook, deleteBook } from "./model.js";
 import { DatabaseError } from "pg";
 import { DrizzleQueryError } from "drizzle-orm/errors";
 
@@ -19,7 +19,7 @@ app.get(
       if (books.length >= 1) {
         res.status(200).json(books);
       } else {
-        res.status(404).json({ Error: "No boooks in tracker." });
+        res.status(400).json({ Error: "No boooks in tracker." });
       }
     } catch (e) {
       console.log(e);
@@ -45,6 +45,23 @@ app.post(
       } else {
         res.status(404).json({ Error: "Unable to add book." });
       }
+    }
+  }),
+);
+
+app.delete(
+  "/delete/:id",
+  expressAsyncHandler(async (req, res) => {
+    try {
+      const result = await deleteBook(Number(req.params.id));
+      if (result.length > 0) {
+        res.status(200).json({ Success: "Book deleted." });
+      } else {
+        res.status(404).json({ Success: "Book not found." });
+      }
+    } catch (e) {
+      console.log(e);
+      res.status(404).json({ Error: "Unable to add book." });
     }
   }),
 );

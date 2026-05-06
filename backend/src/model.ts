@@ -1,8 +1,5 @@
-// TODO:
-// - modularize the insert function
-
 import { db } from "./db/connection.js";
-import { Book, NewBook, Author } from "./types.js";
+import { Book, NewBook, Author, EditBook } from "./types.js";
 import { eq, sql } from "drizzle-orm";
 import {
   books,
@@ -171,4 +168,14 @@ export async function addBook(bookInfo: NewBook) {
       format: bookInfo.format,
     });
   });
+}
+
+// export async function editBook(bookInfo: EditBook): {};
+
+export async function deleteBook(id: number) {
+  const deletedBook = await db
+    .delete(books)
+    .where(eq(books.id, id))
+    .returning();
+  return deletedBook;
 }
