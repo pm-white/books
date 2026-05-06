@@ -1,6 +1,6 @@
 import { db } from "./db/connection.js";
 import { Book, NewBook, Author, EditBook } from "./types.js";
-import { eq, sql } from "drizzle-orm";
+import { eq, sql, and, isNull } from "drizzle-orm";
 import {
   books,
   bookAuthors,
@@ -80,8 +80,28 @@ export async function addBook(bookInfo: NewBook) {
             middleName: author.middleName,
             lastName: author.lastName,
           })
-          .returning();
-        authorIds.push(insertedAuthor[0].id);
+          .returning()
+          .onConflictDoNothing();
+        if (insertedAuthor.length > 0) {
+          authorIds.push(insertedAuthor[0].id);
+        } else {
+          // get id of existing author
+          const result = await tx
+            .select({ id: authors.id })
+            .from(authors)
+            .where(
+              and(
+                eq(authors.firstName, author.firstName),
+                author.middleName === null
+                  ? isNull(authors.middleName)
+                  : eq(authors.middleName, author.middleName),
+                author.lastName === null
+                  ? isNull(authors.lastName)
+                  : eq(authors.lastName, author.lastName),
+              ),
+            );
+          authorIds.push(result[0].id);
+        }
       }),
     );
 
