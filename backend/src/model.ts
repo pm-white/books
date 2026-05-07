@@ -1,5 +1,5 @@
 import { db } from "./db/connection.js";
-import { Book, NewBook, Author, EditBook } from "./types.js";
+import { Book, NewBook, Author, EditBook, insertResult } from "./types.js";
 import { eq, sql, and, isNull } from "drizzle-orm";
 import {
   books,
@@ -53,35 +53,42 @@ export async function getBooks(): Promise<Book[]> {
     );
 }
 
+async function insertRow(
+  db: any,
+  tableName: any,
+  values: object,
+): Promise<object[]> {
+  console.log("inserting values:", values);
+  return await db
+    .insert(tableName)
+    .values(values)
+    .onConflictDoNothing()
+    .returning();
+}
+
 export async function addBook(bookInfo: NewBook) {
+  console.log("bookInfo:", bookInfo);
   // wrap all the inserts in a single transaction
   await db.transaction(async (tx) => {
     // insert into books
-    const insertedBook = await tx
-      .insert(books)
-      .values({
-        isbn: bookInfo.isbn,
-        title: bookInfo.title,
-        subTitle: bookInfo.subTitle,
-        year: bookInfo.year,
-        numPages: bookInfo.numPages,
-        type: bookInfo.type,
-      })
-      .returning();
+    const insertedBook: insertResult = await insertRow(tx, books, {
+      isbn: bookInfo.isbn,
+      title: bookInfo.title,
+      subTitle: bookInfo.subTitle,
+      year: bookInfo.year,
+      numPages: bookInfo.numPages,
+      type: bookInfo.type,
+    });
 
     // insert each author into authors
     let authorIds: number[] = [];
     await Promise.all(
       bookInfo.authors.map(async (author: Author) => {
-        const insertedAuthor = await tx
-          .insert(authors)
-          .values({
-            firstName: author.firstName,
-            middleName: author.middleName,
-            lastName: author.lastName,
-          })
-          .returning()
-          .onConflictDoNothing();
+        const insertedAuthor: insertResult = await insertRow(tx, authors, {
+          firstName: author.firstName,
+          middleName: author.middleName,
+          lastName: author.lastName,
+        });
         if (insertedAuthor.length > 0) {
           authorIds.push(insertedAuthor[0].id);
         } else {
@@ -109,7 +116,7 @@ export async function addBook(bookInfo: NewBook) {
     if (authorIds.length > 0) {
       await Promise.all(
         authorIds.map(async (id: number) => {
-          await tx.insert(bookAuthors).values({
+          await insertRow(tx, bookAuthors, {
             bookId: insertedBook[0].id,
             authorId: id,
           });
@@ -118,11 +125,9 @@ export async function addBook(bookInfo: NewBook) {
     }
 
     // insert into publishers
-    const insertedPublisher = await tx
-      .insert(publishers)
-      .values({ name: bookInfo.publisher })
-      .onConflictDoNothing()
-      .returning();
+    const insertedPublisher: insertResult = await insertRow(tx, publishers, {
+      name: bookInfo.publisher,
+    });
 
     // insert into bookPublishers
     let pubId: number;
@@ -137,7 +142,7 @@ export async function addBook(bookInfo: NewBook) {
         .where(eq(publishers.name, bookInfo.publisher));
       pubId = result[0].id;
     }
-    await tx.insert(bookPublishers).values({
+    await insertRow(tx, bookPublishers, {
       bookId: insertedBook[0].id,
       publisherId: pubId,
     });
@@ -147,13 +152,9 @@ export async function addBook(bookInfo: NewBook) {
       let topicIds: number[] = [];
       await Promise.all(
         bookInfo.topics.map(async (topicName: string) => {
-          const insertedTopic = await tx
-            .insert(topics)
-            .values({
-              topic: topicName,
-            })
-            .onConflictDoNothing()
-            .returning();
+          const insertedTopic: insertResult = await insertRow(tx, topics, {
+            topic: topicName,
+          });
           if (insertedTopic.length > 0) {
             topicIds.push(insertedTopic[0].id);
           } else {
@@ -171,7 +172,7 @@ export async function addBook(bookInfo: NewBook) {
       if (topicIds.length > 0) {
         await Promise.all(
           topicIds.map(async (id: number) => {
-            await tx.insert(bookTopics).values({
+            await insertRow(tx, bookTopics, {
               bookId: insertedBook[0].id,
               topicId: id,
             });
@@ -181,7 +182,7 @@ export async function addBook(bookInfo: NewBook) {
     }
 
     // insert into readings
-    await tx.insert(readings).values({
+    await insertRow(tx, readings, {
       bookId: insertedBook[0].id,
       startDate: bookInfo.startDate,
       endDate: bookInfo.endDate,

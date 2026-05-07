@@ -32,5 +32,25 @@ export interface NewBook {
 export interface Author {
   firstName: string;
   middleName: string | null;
-  lastName: string;
+  lastName: string | null;
 }
+
+export interface EditBook {
+  id: number;
+  isbn?: string;
+  title?: string;
+  subTitle?: string;
+  year?: number;
+  numPages?: number;
+  type?: string;
+  authors?: Author[];
+  topics?: string[];
+  publisher?: string;
+  startDate?: string;
+  endDate?: string;
+  format?: string;
+}
+
+export type insertResult = {
+  [key: string]: any;
+};
