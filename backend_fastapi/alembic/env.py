@@ -1,9 +1,18 @@
 from logging.config import fileConfig
 
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
+from sqlalchemy import create_engine, pool, URL
 
 from alembic import context
+
+from dotenv import load_dotenv
+import os
+
+import sys
+from pathlib import Path
+
+from schema import Base
+
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -18,12 +27,13 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = None
+target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
+load_dotenv(Path(__file__).parent.parent.parent / ".env.dev")
 
 
 def run_migrations_offline() -> None:
@@ -57,16 +67,26 @@ def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
-    connectable = engine_from_config(
-        config.get_section(config.config_ini_section, {}),
-        prefix="sqlalchemy.",
-        poolclass=pool.NullPool,
+    database_driver = os.environ["DB_DRIVER"]
+    username = os.environ["DB_USERNAME"]
+    password = os.environ["DB_PASSWORD"]
+    host = os.environ["DB_HOST"]
+    port = os.environ["DB_PORT"]
+    database = os.environ["DB_NAME"]
+
+    url = URL.create(
+        drivername=database_driver,
+        username=username,
+        password=password,
+        host=host,
+        port=int(port),
+        database=database,
     )
 
+    connectable = create_engine(url, poolclass=pool.NullPool)
+
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection, target_metadata=target_metadata
-        )
+        context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()
