@@ -29,3 +29,8 @@ def get_topics(db: Session = Depends(get_db)):
 @app.get("/publishers")
 def get_publishers(db: Session = Depends(get_db)):
     return model.get_publishers(db)
+
+
+@app.get("/book-info")
+def get_book_info(db: Session = Depends(get_db)):
+    return model.get_book_info(db)

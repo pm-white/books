@@ -109,3 +109,21 @@ class BookPublishers(Base):
     publisher_id: Mapped[int] = mapped_column(
         ForeignKey("publishers.id", ondelete="CASCADE")
     )
+
+
+class BookInfo(Base):
+    __tablename__ = "book_info"
+
+    id: Mapped[str] = mapped_column(primary_key=True)
+    isbn: Mapped[str]
+    title: Mapped[str]
+    sub_title: Mapped[str]
+    year: Mapped[int]
+    num_pages: Mapped[int]
+    type: Mapped[str]
+    publisher: Mapped[str]
+    start_date: Mapped[date] = mapped_column(Date)
+    end_date: Mapped[date] = mapped_column(Date)
+    format: Mapped[str]
+    topics: Mapped[str]
+    authors: Mapped[str]
