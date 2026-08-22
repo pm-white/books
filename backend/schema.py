@@ -1,8 +1,8 @@
-from typing import Optional
-from sqlalchemy import ForeignKey, UniqueConstraint, TEXT
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-from sqlalchemy import Date
 from datetime import date
+from typing import Optional
+
+from sqlalchemy import TEXT, Date, ForeignKey, UniqueConstraint
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
 class Base(DeclarativeBase):

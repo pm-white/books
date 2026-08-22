@@ -1,7 +1,8 @@
-from sqlalchemy.orm import Session
-from schema import Books, Authors, Topics, Publishers, BookInfo
-from type_classes import Book
 from sqlalchemy import null, select
+from sqlalchemy.orm import Session
+
+from schema import Authors, BookInfo, Books, Publishers, Topics
+from type_classes import Book
 
 
 def get_homepage_data(db: Session):
