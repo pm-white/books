@@ -1,6 +1,25 @@
-from sqlalchemy.orm import Session, query
-from sqlalchemy import select, func
+from sqlalchemy.orm import Session
 from schema import Books, Authors, Topics, Publishers, BookInfo
+from type_classes import Book
+from sqlalchemy import null, select
+
+
+def get_homepage_data(db: Session):
+    data = {}
+    conditions = [
+        (
+            "have_read",
+            (BookInfo.start_date.is_not(null()) & BookInfo.end_date.is_not(null())),
+        ),
+        ("to_read", (BookInfo.start_date.is_(null()) & BookInfo.end_date.is_(null()))),
+        (
+            "reading",
+            (BookInfo.start_date.is_not(null()) & BookInfo.end_date.is_(null())),
+        ),
+    ]
+    for type, condition in conditions:
+        data[type] = db.execute(select(BookInfo).where(condition)).scalars().all()
+    return data
 
 
 def get_books(db: Session):
@@ -17,7 +36,3 @@ def get_topics(db: Session):
 
 def get_publishers(db: Session):
     return db.query(Publishers).all()
-
-
-def get_book_info(db: Session):
-    return db.query(BookInfo).all()
