@@ -1,1 +1,0 @@
-ALTER TABLE "authors" ADD CONSTRAINT "authors_first_name_middle_name_last_name_unique" UNIQUE NULLS NOT DISTINCT("first_name","middle_name","last_name");
